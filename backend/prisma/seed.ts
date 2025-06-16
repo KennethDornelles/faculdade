@@ -49,69 +49,81 @@ async function main() {
     },
   });
 
-  // Criar produtos - Baseado no frontend
-  const products = [
-    {
-      name: 'Smartphone Premium',
-      description: 'Smartphone com câmera de 108MP e tela AMOLED de 6.7 polegadas',
-      price: 2499.99,
-      image: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=500',
-      category: 'Eletrônicos',
-      brand: 'TechBrand',
-      stock: 50,
-    },
-    {
-      name: 'Notebook Gamer',
-      description: 'Notebook para gaming com placa RTX 4060 e 16GB RAM',
-      price: 4299.99,
-      image: 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=500',
-      category: 'Informática',
-      brand: 'GamePro',
-      stock: 25,
-    },
-    {
-      name: 'Fone Bluetooth',
-      description: 'Fone de ouvido wireless com cancelamento de ruído',
-      price: 299.99,
-      image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500',
-      category: 'Áudio',
-      brand: 'SoundTech',
-      stock: 100,
-    },
-    {
-      name: 'Smart TV 55"',
-      description: 'Smart TV 4K com HDR e sistema Android TV',
-      price: 1899.99,
-      image: 'https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=500',
-      category: 'Eletrônicos',
-      brand: 'VisionTech',
-      stock: 30,
-    },
-    {
-      name: 'Relógio Smartwatch',
-      description: 'Smartwatch com GPS, monitor cardíaco e 7 dias de bateria',
-      price: 899.99,
-      image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500',
-      category: 'Wearables',
-      brand: 'FitTech',
-      stock: 75,
-    },
-    {
-      name: 'Camera Digital',
-      description: 'Câmera DSLR profissional com lente 18-55mm',
-      price: 3299.99,
-      image: 'https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=500',
-      category: 'Fotografia',
-      brand: 'PhotoPro',
-      stock: 15,
-    },
-  ];
-
-  for (const productData of products) {
-    await prisma.product.create({
-      data: productData,
-    });
-  }
+  // Criar produtos
+  const products = await Promise.all([
+    prisma.product.create({
+      data: {
+        name: 'Smartphone Pro Max',
+        description: 'Smartphone de última geração com câmera profissional',
+        price: 2999.99,
+        image:
+          'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=400',
+        category: 'Eletrônicos',
+        brand: 'TechCorp',
+        stock: 50,
+      },
+    }),
+    prisma.product.create({
+      data: {
+        name: 'Notebook Gamer Ultra',
+        description: 'Notebook para jogos com placa de vídeo dedicada',
+        price: 4599.99,
+        image:
+          'https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=400',
+        category: 'Eletrônicos',
+        brand: 'GameMax',
+        stock: 25,
+      },
+    }),
+    prisma.product.create({
+      data: {
+        name: 'Headset Wireless Premium',
+        description: 'Fone de ouvido sem fio com cancelamento de ruído',
+        price: 899.99,
+        image:
+          'https://images.unsplash.com/photo-1484704849700-f032a568e944?w=400',
+        category: 'Acessórios',
+        brand: 'SoundTech',
+        stock: 100,
+      },
+    }),
+    prisma.product.create({
+      data: {
+        name: 'Monitor 4K Ultrawide',
+        description: 'Monitor curvo 34" com resolução 4K',
+        price: 1899.99,
+        image:
+          'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=400',
+        category: 'Eletrônicos',
+        brand: 'ViewMax',
+        stock: 30,
+      },
+    }),
+    prisma.product.create({
+      data: {
+        name: 'Smartwatch Fitness',
+        description: 'Relógio inteligente com monitoramento de saúde',
+        price: 799.99,
+        image:
+          'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400',
+        category: 'Wearables',
+        brand: 'FitTech',
+        stock: 75,
+      },
+    }),
+    prisma.product.create({
+      data: {
+        name: 'Câmera DSLR Profissional',
+        description: 'Câmera digital para fotografia profissional',
+        price: 3299.99,
+        image:
+          'https://images.unsplash.com/photo-1606983340126-99ab4feaa64a?w=400',
+        category: 'Fotografia',
+        brand: 'PhotoPro',
+        stock: 15,
+      },
+    }),
+  ]);
 
   // Criar endereço para o usuário
   await prisma.address.create({
@@ -120,7 +132,7 @@ async function main() {
       zipCode: '01310-100',
       street: 'Avenida Paulista',
       number: '1000',
-      complement: 'Apto 101',
+      complement: 'Apartamento 101',
       neighborhood: 'Bela Vista',
       city: 'São Paulo',
       state: 'SP',
@@ -128,32 +140,17 @@ async function main() {
     },
   });
 
-  // Criar configurações do sistema
-  const settings = [
-    { key: 'shipping_price', value: '15.00', type: 'NUMBER' },
-    { key: 'free_shipping_minimum', value: '200.00', type: 'NUMBER' },
-    { key: 'site_name', value: 'E-commerce dos Guri', type: 'STRING' },
-    { key: 'contact_email', value: 'contato@ecommerce.com', type: 'STRING' },
-    { key: 'contact_phone', value: '(11) 9999-9999', type: 'STRING' },
-  ];
-
-  for (const setting of settings) {
-    await prisma.setting.create({
-      data: setting,
-    });
-  }
-
   console.log('✅ Seed concluído com sucesso!');
-  console.log('👤 Admin criado:', admin.email, '| Senha: admin123');
-  console.log('👤 Cliente criado:', user.email, '| Senha: user123');
-  console.log('🛍️ Produtos criados:', products.length);
+  console.log(`👨‍💼 Admin criado: ${admin.email} / admin123`);
+  console.log(`👤 Cliente criado: ${user.email} / user123`);
+  console.log(`📦 ${products.length} produtos criados`);
 }
 
 main()
   .catch((e) => {
-    console.error('❌ Erro no seed:', e);
+    console.error('❌ Erro durante o seed:', e);
     process.exit(1);
   })
-  .finally(async () => {
-    await prisma.$disconnect();
+  .finally(() => {
+    return prisma.$disconnect();
   });
