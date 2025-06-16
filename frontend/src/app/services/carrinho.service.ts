@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { CarrinhoItem, Produto } from '../models/produto.model';
+import { CarrinhoItem } from '../models/carrinho-item.interface';
+import { Produto } from '../models/produto.model';
 
 @Injectable({
   providedIn: 'root'
@@ -19,14 +20,13 @@ export class CarrinhoService {
       this.carrinhoSubject.next(this.itens);
     }
   }
-
   adicionarProduto(produto: Produto): void {
     const itemExistente = this.itens.find(item => item.id === produto.id);
     
     if (itemExistente) {
-      itemExistente.quantidade += 1;
+      itemExistente.quantity += 1;
     } else {
-      this.itens.push({ ...produto, quantidade: 1 });
+      this.itens.push({ ...produto, quantity: 1 });
     }
     
     this.atualizarCarrinho();
@@ -40,28 +40,38 @@ export class CarrinhoService {
   alterarQuantidade(produtoId: number, quantidade: number): void {
     const item = this.itens.find(item => item.id === produtoId);
     if (item) {
-      item.quantidade = Math.max(1, quantidade);
-      if (item.quantidade <= 0) {
+      item.quantity = Math.max(1, quantidade);
+      if (item.quantity <= 0) {
         this.removerProduto(produtoId);
       } else {
         this.atualizarCarrinho();
       }
     }
   }
-
   obterItens(): CarrinhoItem[] {
     return this.itens;
   }
 
   obterQuantidadeTotal(): number {
-    return this.itens.reduce((total, item) => total + item.quantidade, 0);
+    return this.itens.reduce((total, item) => total + item.quantity, 0);
   }
 
   calcularTotal(): number {
     return this.itens.reduce((total, item) => {
-      const preco = this.converterPrecoParaNumero(item.preco);
-      return total + (preco * item.quantidade);
+      return total + (item.price * item.quantity);
     }, 0);
+  }
+
+  calcularSubtotal(): number {
+    return this.calcularTotal();
+  }
+
+  calcularFrete(): number {
+    return 15.00; // Frete fixo por enquanto
+  }
+
+  calcularTotalComFrete(): number {
+    return this.calcularSubtotal() + this.calcularFrete();
   }
 
   limparCarrinho(): void {
@@ -74,7 +84,11 @@ export class CarrinhoService {
     localStorage.setItem('carrinho', JSON.stringify(this.itens));
   }
 
-  private converterPrecoParaNumero(preco: string): number {
-    return parseFloat(preco.replace('R$ ', '').replace('.', '').replace(',', '.'));
+  // Método auxiliar para formatar preço
+  formatarPreco(price: number): string {
+    return new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL'
+    }).format(price);
   }
 }

@@ -23,11 +23,10 @@ import { Produto } from '../../models/produto.model';
             *ngFor="let produto of produtos; let i = index" 
             class="produto-card"
             [style.animation-delay.s]="i * 0.1"
-          >
-            <img [src]="produto.imagem" [alt]="produto.nome" loading="lazy">
-            <h3>{{ produto.nome }}</h3>
-            <p class="descricao">{{ produto.descricao }}</p>
-            <p class="preco">{{ produto.preco }}</p>
+          >            <img [src]="produto.image" [alt]="produto.name" loading="lazy">
+            <h3>{{ produto.name }}</h3>
+            <p class="descricao">{{ produto.description }}</p>
+            <p class="preco">{{ formatarPreco(produto.price) }}</p>
             <button class="btn-comprar" (click)="adicionarAoCarrinho(produto)">
               Adicionar ao Carrinho
             </button>
@@ -181,17 +180,26 @@ export class ProdutosComponent implements OnInit {
   }
 
   carregarProdutos(): void {
-    // Simular delay para mostrar loading
-    setTimeout(() => {
-      this.produtoService.getProdutos().subscribe(produtos => {
+    this.carregando = true;
+    this.produtoService.getProdutos().subscribe({
+      next: (produtos) => {
         this.produtos = produtos;
         this.carregando = false;
-      });
-    }, 500);
+      },
+      error: (error) => {
+        console.error('Erro ao carregar produtos:', error);
+        this.carregando = false;
+        this.notificacaoService.mostrarNotificacao('Erro ao carregar produtos', 'error');
+      }
+    });
   }
 
   adicionarAoCarrinho(produto: Produto): void {
     this.carrinhoService.adicionarProduto(produto);
-    this.notificacaoService.mostrarNotificacao(`${produto.nome} adicionado ao carrinho!`, 'success');
+    this.notificacaoService.mostrarNotificacao(`${produto.name} adicionado ao carrinho!`, 'success');
+  }
+
+  formatarPreco(price: number): string {
+    return this.produtoService.formatarPreco(price);
   }
 }

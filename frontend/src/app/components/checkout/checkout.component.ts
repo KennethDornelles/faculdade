@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CarrinhoService } from '../../services/carrinho.service';
-import { CepService } from '../../services/cep.service';
+import { CepService, EnderecoViaCep } from '../../services/cep.service';
 import { NotificacaoService } from '../../services/notificacao.service';
-import { CarrinhoItem } from '../../models/produto.model';
+import { CarrinhoItem } from '../../models/carrinho-item.interface';
 
 @Component({
   selector: 'app-checkout',
@@ -194,15 +194,14 @@ import { CarrinhoItem } from '../../models/produto.model';
 
           <div class="checkout-right">
             <div class="order-summary">
-              <h3>Resumo do Pedido</h3>
-              <div class="checkout-items">
+              <h3>Resumo do Pedido</h3>              <div class="checkout-items">
                 <div *ngFor="let item of itensCarrinho" class="checkout-item">
-                  <img [src]="item.imagem" [alt]="item.nome">
+                  <img [src]="item.image" [alt]="item.name">
                   <div class="checkout-item-info">
-                    <h4>{{ item.nome }}</h4>
-                    <p>Quantidade: {{ item.quantidade }}</p>
+                    <h4>{{ item.name }}</h4>
+                    <p>Quantidade: {{ item.quantity }}</p>
                   </div>
-                  <div class="checkout-item-price">{{ item.preco }}</div>
+                  <div class="checkout-item-price">{{ item.price | currency:'BRL':'symbol':'1.2-2':'pt' }}</div>
                 </div>
               </div>
               <div class="order-totals">
@@ -638,7 +637,7 @@ export class CheckoutComponent implements OnInit {
   buscarCEP(): void {
     const cep = this.formEndereco.get('cep')?.value;
     if (cep && cep.length === 9) {
-      this.cepService.buscarCep(cep).subscribe(endereco => {
+      this.cepService.buscarCep(cep).subscribe((endereco: EnderecoViaCep) => {
         if (endereco && !endereco.erro) {
           this.formEndereco.patchValue({
             rua: endereco.logradouro,

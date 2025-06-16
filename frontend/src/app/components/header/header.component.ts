@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CarrinhoService } from '../../services/carrinho.service';
+import { CarrinhoItem } from '../../models/carrinho-item.interface';
 
 @Component({
   selector: 'app-header',
@@ -41,17 +42,16 @@ import { CarrinhoService } from '../../services/carrinho.service';
             <div id="carrinho-items">
               <div *ngIf="itensCarrinho.length === 0" class="carrinho-vazio">
                 <p>Seu carrinho está vazio</p>
-              </div>
-              <div *ngFor="let item of itensCarrinho" class="carrinho-item">
-                <img [src]="item.imagem" [alt]="item.nome" loading="lazy">
+              </div>              <div *ngFor="let item of itensCarrinho" class="carrinho-item">
+                <img [src]="item.image" [alt]="item.name" loading="lazy">
                 <div class="item-info">
-                  <h4>{{ item.nome }}</h4>
-                  <p>{{ item.preco }}</p>
+                  <h4>{{ item.name }}</h4>
+                  <p>{{ item.price | currency:'BRL':'symbol':'1.2-2':'pt' }}</p>
                 </div>
                 <div class="item-controls">
-                  <button (click)="alterarQuantidade(item.id, item.quantidade - 1)">-</button>
-                  <span>{{ item.quantidade }}</span>
-                  <button (click)="alterarQuantidade(item.id, item.quantidade + 1)">+</button>
+                  <button (click)="alterarQuantidade(item.id, item.quantity - 1)">-</button>
+                  <span>{{ item.quantity }}</span>
+                  <button (click)="alterarQuantidade(item.id, item.quantity + 1)">+</button>
                 </div>
                 <button class="remover-item" (click)="removerItem(item.id)">🗑️</button>
               </div>
@@ -354,7 +354,7 @@ import { CarrinhoService } from '../../services/carrinho.service';
 export class HeaderComponent implements OnInit {
   menuAberto = false;
   carrinhoAberto = false;
-  itensCarrinho: any[] = [];
+  itensCarrinho: CarrinhoItem[] = [];
   quantidadeItens = 0;
   total = 0;
 

@@ -1,13 +1,17 @@
+import { CarrinhoItem } from './carrinho-item.interface';
+
 export interface Produto {
   id: number;
-  nome: string;
-  preco: string;
-  imagem: string;
-  descricao: string;
-}
-
-export interface CarrinhoItem extends Produto {
-  quantidade: number;
+  name: string;
+  description?: string;
+  price: number;
+  image: string;
+  category?: string;
+  brand?: string;
+  stock: number;
+  isActive: boolean;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface FormCliente {
