@@ -21,7 +21,8 @@ export class ViaCepService {
   private readonly viaCepUrl: string;
 
   constructor(private configService: ConfigService) {
-    this.viaCepUrl = this.configService.get('app.viaCepUrl');
+    this.viaCepUrl =
+      this.configService.get('app.viaCepUrl') || 'https://viacep.com.br/ws';
   }
 
   async searchCep(cep: string): Promise<ViaCepResponse> {
