@@ -17,7 +17,7 @@ export class ProductService {
         where: { isActive: true },
         orderBy: { createdAt: 'desc' },
       });
-    } catch (error) {
+    } catch {
       // Se falhar, usa dados mock
       return this.mockDataService.getMockProducts();
     }
@@ -34,7 +34,7 @@ export class ProductService {
       }
 
       return product;
-    } catch (error) {
+    } catch {
       // Se falhar, usa dados mock
       const mockProduct = this.mockDataService.getMockProductById(id);
       if (!mockProduct) {
@@ -68,17 +68,17 @@ export class ProductService {
     });
   }
 
-  async findByCategory(category: string) {
+  async findByCategory(productCategory: string) {
     try {
       return await this.prisma.product.findMany({
         where: {
-          category,
+          productCategory: productCategory as any, // enum do Prisma
           isActive: true,
         },
         orderBy: { createdAt: 'desc' },
       });
     } catch {
-      return this.mockDataService.getMockProductsByCategory(category);
+      return this.mockDataService.getMockProductsByCategory(productCategory);
     }
   }
 
@@ -90,8 +90,9 @@ export class ProductService {
           OR: [
             { name: { contains: query, mode: 'insensitive' } },
             { description: { contains: query, mode: 'insensitive' } },
-            { category: { contains: query, mode: 'insensitive' } },
             { brand: { contains: query, mode: 'insensitive' } },
+            // Busca por categoria exata se for um valor válido do enum
+            { productCategory: query.toUpperCase() as any },
           ],
         },
         orderBy: { createdAt: 'desc' },

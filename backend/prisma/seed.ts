@@ -53,74 +53,84 @@ async function main() {
   const products = await Promise.all([
     prisma.product.create({
       data: {
-        name: 'Smartphone Pro Max',
-        description: 'Smartphone de última geração com câmera profissional',
-        price: 2999.99,
+        name: 'Ração Premium para Cães Adultos',
+        description:
+          'Ração de alta qualidade para cães adultos de todos os portes',
+        price: 159.9,
         image:
-          'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=400',
-        category: 'Eletrônicos',
-        brand: 'TechCorp',
-        stock: 50,
-      },
-    }),
-    prisma.product.create({
-      data: {
-        name: 'Notebook Gamer Ultra',
-        description: 'Notebook para jogos com placa de vídeo dedicada',
-        price: 4599.99,
-        image:
-          'https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=400',
-        category: 'Eletrônicos',
-        brand: 'GameMax',
-        stock: 25,
-      },
-    }),
-    prisma.product.create({
-      data: {
-        name: 'Headset Wireless Premium',
-        description: 'Fone de ouvido sem fio com cancelamento de ruído',
-        price: 899.99,
-        image:
-          'https://images.unsplash.com/photo-1484704849700-f032a568e944?w=400',
-        category: 'Acessórios',
-        brand: 'SoundTech',
+          'https://images.unsplash.com/photo-1518717758536-85ae29035b6d?w=400',
+        productCategory: 'FOOD',
+        petType: ['DOG'],
+        brand: 'DogNutri',
         stock: 100,
       },
     }),
     prisma.product.create({
       data: {
-        name: 'Monitor 4K Ultrawide',
-        description: 'Monitor curvo 34" com resolução 4K',
-        price: 1899.99,
+        name: 'Arranhador para Gatos com Torre',
+        description: 'Arranhador com torre e brinquedos para gatos',
+        price: 249.99,
         image:
-          'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=400',
-        category: 'Eletrônicos',
-        brand: 'ViewMax',
-        stock: 30,
+          'https://images.unsplash.com/photo-1518715308788-3005759c61d4?w=400',
+        productCategory: 'ACCESSORIES',
+        petType: ['CAT'],
+        brand: 'CatFun',
+        stock: 40,
       },
     }),
     prisma.product.create({
       data: {
-        name: 'Smartwatch Fitness',
-        description: 'Relógio inteligente com monitoramento de saúde',
-        price: 799.99,
+        name: 'Brinquedo Interativo para Cães',
+        description:
+          'Brinquedo resistente e divertido para cães de todos os tamanhos',
+        price: 49.9,
         image:
-          'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400',
-        category: 'Wearables',
-        brand: 'FitTech',
-        stock: 75,
+          'https://images.unsplash.com/photo-1508672019048-805c876b67e2?w=400',
+        productCategory: 'TOYS',
+        petType: ['DOG'],
+        brand: 'PetPlay',
+        stock: 200,
       },
     }),
     prisma.product.create({
       data: {
-        name: 'Câmera DSLR Profissional',
-        description: 'Câmera digital para fotografia profissional',
-        price: 3299.99,
+        name: 'Areia Higiênica Super Absorvente para Gatos',
+        description:
+          'Areia higiênica com alto poder de absorção e controle de odores',
+        price: 35.5,
         image:
-          'https://images.unsplash.com/photo-1606983340126-99ab4feaa64a?w=400',
-        category: 'Fotografia',
-        brand: 'PhotoPro',
-        stock: 15,
+          'https://images.unsplash.com/photo-1518715308788-3005759c61d4?w=400',
+        productCategory: 'HYGIENE',
+        petType: ['CAT'],
+        brand: 'CatClean',
+        stock: 120,
+      },
+    }),
+    prisma.product.create({
+      data: {
+        name: 'Gaiola para Hamster com Acessórios',
+        description:
+          'Gaiola completa para hamster com roda, bebedouro e comedouro',
+        price: 129.99,
+        image:
+          'https://images.unsplash.com/photo-1518715308788-3005759c61d4?w=400',
+        productCategory: 'CAGES',
+        petType: ['RODENT'],
+        brand: 'RodentHome',
+        stock: 60,
+      },
+    }),
+    prisma.product.create({
+      data: {
+        name: 'Aquário Completo 20L com Filtro e Iluminação',
+        description: 'Aquário de vidro 20 litros com filtro e iluminação LED',
+        price: 399.99,
+        image:
+          'https://images.unsplash.com/photo-1518715308788-3005759c61d4?w=400',
+        productCategory: 'AQUARIUM',
+        petType: ['FISH'],
+        brand: 'AquaWorld',
+        stock: 20,
       },
     }),
   ]);
@@ -152,5 +162,5 @@ main()
     process.exit(1);
   })
   .finally(() => {
-    return prisma.$disconnect();
+    void prisma.$disconnect();
   });

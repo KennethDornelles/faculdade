@@ -198,7 +198,7 @@ export class CartService {
         acc.totalItems += item.quantity;
         return acc;
       },
-      { subtotal: 0, totalItems: 0, shipping: 15.0 },
+      { subtotal: 0, totalItems: 0, shipping: 15.0, total: 0 },
     );
 
     summary.total = summary.subtotal + summary.shipping;

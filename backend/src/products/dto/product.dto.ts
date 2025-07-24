@@ -29,10 +29,35 @@ export class CreateProductDto {
   @IsUrl()
   image: string;
 
-  @ApiProperty({ example: 'Eletrônicos' })
-  @IsOptional()
-  @IsString()
-  category?: string;
+  @ApiProperty({
+    example: 'FOOD',
+    enum: [
+      'FOOD',
+      'TOYS',
+      'HYGIENE',
+      'ACCESSORIES',
+      'MEDICINE',
+      'AQUARIUM',
+      'CAGES',
+    ],
+  })
+  productCategory:
+    | 'FOOD'
+    | 'TOYS'
+    | 'HYGIENE'
+    | 'ACCESSORIES'
+    | 'MEDICINE'
+    | 'AQUARIUM'
+    | 'CAGES';
+
+  @ApiProperty({
+    example: ['DOG'],
+    enum: ['DOG', 'CAT', 'BIRD', 'FISH', 'RODENT', 'REPTILE', 'OTHER'],
+    isArray: true,
+  })
+  petType: Array<
+    'DOG' | 'CAT' | 'BIRD' | 'FISH' | 'RODENT' | 'REPTILE' | 'OTHER'
+  >;
 
   @ApiProperty({ example: 'Apple' })
   @IsOptional()
@@ -76,10 +101,39 @@ export class UpdateProductDto {
   @IsUrl()
   image?: string;
 
-  @ApiProperty({ example: 'Smartphones', required: false })
+  @ApiProperty({
+    example: 'FOOD',
+    required: false,
+    enum: [
+      'FOOD',
+      'TOYS',
+      'HYGIENE',
+      'ACCESSORIES',
+      'MEDICINE',
+      'AQUARIUM',
+      'CAGES',
+    ],
+  })
   @IsOptional()
-  @IsString()
-  category?: string;
+  productCategory?:
+    | 'FOOD'
+    | 'TOYS'
+    | 'HYGIENE'
+    | 'ACCESSORIES'
+    | 'MEDICINE'
+    | 'AQUARIUM'
+    | 'CAGES';
+
+  @ApiProperty({
+    example: ['DOG'],
+    required: false,
+    enum: ['DOG', 'CAT', 'BIRD', 'FISH', 'RODENT', 'REPTILE', 'OTHER'],
+    isArray: true,
+  })
+  @IsOptional()
+  petType?: Array<
+    'DOG' | 'CAT' | 'BIRD' | 'FISH' | 'RODENT' | 'REPTILE' | 'OTHER'
+  >;
 
   @ApiProperty({ example: 'Apple', required: false })
   @IsOptional()
