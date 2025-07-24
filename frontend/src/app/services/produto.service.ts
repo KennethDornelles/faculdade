@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, catchError, of } from 'rxjs';
-import { Produto } from '../models/produto.model';
-import { CarrinhoItem } from '../models/carrinho-item.interface';
+import { Produto, CarrinhoItem } from '../models/produto.model';
 import { environment } from '../../environments/environment';
 
 @Injectable({

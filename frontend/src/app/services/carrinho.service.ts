@@ -13,11 +13,13 @@ export class CarrinhoService {
   private itens: CarrinhoItem[] = [];
 
   constructor() {
-    // Carregar carrinho do localStorage se existir
-    const carrinhoSalvo = localStorage.getItem('carrinho');
-    if (carrinhoSalvo) {
-      this.itens = JSON.parse(carrinhoSalvo);
-      this.carrinhoSubject.next(this.itens);
+    // Carregar carrinho do localStorage se existir (apenas no browser)
+    if (typeof window !== 'undefined' && window.localStorage) {
+      const carrinhoSalvo = localStorage.getItem('carrinho');
+      if (carrinhoSalvo) {
+        this.itens = JSON.parse(carrinhoSalvo);
+        this.carrinhoSubject.next(this.itens);
+      }
     }
   }
   adicionarProduto(produto: Produto): void {
@@ -81,7 +83,9 @@ export class CarrinhoService {
 
   private atualizarCarrinho(): void {
     this.carrinhoSubject.next(this.itens);
-    localStorage.setItem('carrinho', JSON.stringify(this.itens));
+    if (typeof window !== 'undefined' && window.localStorage) {
+      localStorage.setItem('carrinho', JSON.stringify(this.itens));
+    }
   }
 
   // Método auxiliar para formatar preço

@@ -1,9 +1,6 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
   output   = "../generated/prisma"
@@ -65,19 +62,40 @@ model Address {
   @@map("addresses")
 }
 
-// ===== PRODUTOS =====
+// ===== PRODUTOS DE PETSHOP =====
+enum PetType {
+  DOG
+  CAT
+  BIRD
+  FISH
+  RODENT
+  REPTILE
+  OTHER
+}
+
+enum ProductCategory {
+  FOOD
+  TOYS
+  HYGIENE
+  ACCESSORIES
+  MEDICINE
+  AQUARIUM
+  CAGES
+}
+
 model Product {
-  id          Int       @id @default(autoincrement())
-  name        String
-  description String?
-  price       Decimal   @db.Decimal(10, 2)
-  image       String
-  category    String?
-  brand       String?
-  stock       Int       @default(0)
-  isActive    Boolean   @default(true)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id              Int             @id @default(autoincrement())
+  name            String
+  description     String?
+  price           Decimal         @db.Decimal(10, 2)
+  image           String
+  productCategory ProductCategory
+  petType         PetType[]
+  brand           String?
+  stock           Int             @default(0)
+  isActive        Boolean         @default(true)
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
 
   // Relacionamentos
   orderItems OrderItem[]
@@ -167,7 +185,6 @@ enum PaymentMethod {
   CREDIT_CARD
   DEBIT_CARD
   BOLETO
-  MERCADO_PAGO
 }
 
 enum PaymentStatus {
@@ -205,19 +222,12 @@ model Setting {
   id    Int    @id @default(autoincrement())
   key   String @unique
   value String
-  type  SettingType @default(STRING)
+  type  String // Ex: 'STRING', 'NUMBER', 'BOOLEAN'
   
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@map("settings")
-}
-
-enum SettingType {
-  STRING
-  NUMBER
-  BOOLEAN
-  JSON
 }
 
 // ===== NOTIFICAÇÕES =====
@@ -242,7 +252,6 @@ enum NotificationType {
   WARNING
   ERROR
   ORDER_UPDATE
-  PAYMENT_UPDATE
 }
 
 // ===== CUPONS DE DESCONTO =====
@@ -253,17 +262,15 @@ model Coupon {
   type        CouponType
   value       Decimal     @db.Decimal(10, 2)
   minAmount   Decimal?    @db.Decimal(10, 2)
-  maxDiscount Decimal?    @db.Decimal(10, 2)
   usageLimit  Int?
   usageCount  Int         @default(0)
   isActive    Boolean     @default(true)
-  startsAt    DateTime?
   expiresAt   DateTime?
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
 
   // Relacionamentos
-  orders CouponUsage[]
+  couponUsages CouponUsage[]
 
   @@map("coupons")
 }
@@ -273,21 +280,20 @@ model CouponUsage {
   couponId Int
   orderId  Int
   userId   Int
-  discount Decimal @db.Decimal(10, 2)
-  
-  createdAt DateTime @default(now())
+  usedAt   DateTime @default(now())
 
   // Relacionamentos
   coupon Coupon @relation(fields: [couponId], references: [id])
   user   User   @relation(fields: [userId], references: [id])
+  order  Order  @relation(fields: [orderId], references: [id])
 
   @@unique([couponId, orderId])
-  @@map("coupon_usage")
+  @@map("coupon_usages")
 }
 
 enum CouponType {
   PERCENTAGE
-  FIXED
+  FIXED_VALUE
   FREE_SHIPPING
 }
 
@@ -295,17 +301,16 @@ enum CouponType {
 model AuditLog {
   id        Int      @id @default(autoincrement())
   userId    Int?
-  action    String
-  entity    String
+  action    String   // Ex: 'CREATE_PRODUCT', 'UPDATE_USER_ROLE'
+  entity    String   // Ex: 'Product', 'User'
   entityId  String
-  oldData   Json?
-  newData   Json?
+  details   Json?
   ipAddress String?
   userAgent String?
   createdAt DateTime @default(now())
 
   // Relacionamentos
-  user User? @relation(fields: [userId], references: [id])
+  user User? @relation(fields: [userId], references: [id], onUpdate: NoAction, onDelete: NoAction)
 
   @@map("audit_logs")
 }

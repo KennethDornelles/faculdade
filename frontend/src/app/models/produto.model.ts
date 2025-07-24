@@ -1,4 +1,5 @@
 import { CarrinhoItem } from './carrinho-item.interface';
+export type { CarrinhoItem } from './carrinho-item.interface';
 
 export interface Produto {
   id: number;
